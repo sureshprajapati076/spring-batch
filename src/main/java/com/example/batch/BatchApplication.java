@@ -98,9 +98,9 @@ public class BatchApplication {
 
 	@Bean
 	@StepScope
-	Tasklet tasklet(@Value("#{jobParameters['uuid']}") String date){
+	Tasklet tasklet(@Value("#{jobParameters['uuid']}") String uuid){
 		return ((contribution, chunkContext) -> {
-			System.out.println("HELLO WORLD! " + date);
+			System.out.println("HELLO WORLD! " + uuid);
 			return RepeatStatus.FINISHED;
 		});
 	}
