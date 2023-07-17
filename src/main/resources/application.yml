@@ -1,0 +1,16 @@
+#file: noinspection undefined
+spring:
+  datasource:
+    username: batch
+    password: batch
+    url: jdbc:mysql://localhost:3306/person
+query: select * from my_table where id in ('1917','1918')  # result of this query will be selected for processing
+---
+spring:
+  batch:
+    jdbc:
+      initialize-schema: always
+    job:
+      enabled: false
+
+# spring.batch.initialize-schema=always
