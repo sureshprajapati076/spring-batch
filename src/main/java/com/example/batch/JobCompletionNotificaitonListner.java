@@ -15,7 +15,7 @@ public class JobCompletionNotificaitonListner implements JobExecutionListener {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    @Value("${query}")
+    @Value("${query:null}")
     String query;
 
     @Override
