@@ -1,6 +1,6 @@
 package com.example.batch;
 
-import com.example.batch.domain.PersonDto;
+import com.example.batch.domain.User;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
@@ -22,9 +22,11 @@ public class JobCompletionNotificaitonListner implements JobExecutionListener {
     public void afterJob(JobExecution jobExecution){
         if(jobExecution.getStatus() == BatchStatus.COMPLETED){
             jdbcTemplate.query(query,
-                    (rs,row)->
-                new PersonDto(rs.getInt("id"), rs.getString("name"))
-                    ).forEach(System.out::println);
+                    (rs,row)-> User.builder()
+                            .fname(rs.getString("FNAME"))
+                            .build())
+
+                            .forEach(System.out::println);
         }
     }
 

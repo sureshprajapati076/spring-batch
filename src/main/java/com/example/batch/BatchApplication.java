@@ -1,7 +1,6 @@
 package com.example.batch;
 
-import com.example.batch.domain.Person;
-import com.example.batch.domain.PersonDto;
+import com.example.batch.domain.User;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.Step;
@@ -68,13 +67,13 @@ public class BatchApplication {
 
 	@Bean
 	@StepScope
-	public JdbcPagingItemReader<PersonDto> readNow(){
-		final JdbcPagingItemReader<PersonDto> reader = new JdbcPagingItemReader<>();
-		final PersonMapper personMapper = new PersonMapper();
+	public JdbcPagingItemReader<User> readNow(){
+		final JdbcPagingItemReader<User> reader = new JdbcPagingItemReader<>();
+		final UserMapper userMapper = new UserMapper();
 		reader.setDataSource(dataSource);
 		reader.setFetchSize(10);
 		reader.setPageSize(10);
-		reader.setRowMapper(personMapper);
+		reader.setRowMapper(userMapper);
 		reader.setQueryProvider(createQuery());
 
 		return reader;
@@ -83,7 +82,7 @@ public class BatchApplication {
 
 	private MySqlPagingQueryProvider createQuery() {
 		final Map<String, Order> sortKeys = new HashMap<>();
-		sortKeys.put("id",Order.ASCENDING);
+		sortKeys.put("ID",Order.ASCENDING);
 		final MySqlPagingQueryProvider queryProvider = new MySqlPagingQueryProvider();
 		queryProvider.setSelectClause("*");
 		queryProvider.setFromClause(getFromClause());
@@ -106,20 +105,20 @@ public class BatchApplication {
 	}
 
 	@Bean
-	JdbcBatchItemWriter<Person> writer(){
-		return new JdbcBatchItemWriterBuilder<Person>()
+	JdbcBatchItemWriter<User> writer(){
+		return new JdbcBatchItemWriterBuilder<User>()
 				.itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
-				.sql("update my_table set name=:name where id=:id")
+				.sql("UPDATE USERS SET FNAME= :fname WHERE ID=:id")
 				.dataSource(dataSource)
 				.build();
 
 	}
 
 	@Bean
-	Step csvToDb (JobRepository repository, JdbcBatchItemWriter<Person> writer, PlatformTransactionManager tmx){
+	Step csvToDb (JobRepository repository, JdbcBatchItemWriter<User> writer, PlatformTransactionManager tmx){
 
 		return new StepBuilder("csvToDb",repository)
-				.<PersonDto,Person> chunk(2,tmx)
+				.<User,User> chunk(2,tmx)
 
 				.reader(readNow())
 				.processor(processor())
@@ -130,8 +129,8 @@ public class BatchApplication {
 	}
 
 	@Bean
-	public PersonItemProcessor processor() {
-		return new PersonItemProcessor();
+	public UserItemProcessor processor() {
+		return new UserItemProcessor();
 	}
 
 	private TaskExecutor taskExecutor() {
@@ -155,13 +154,5 @@ public class BatchApplication {
 		return new JdbcTemplate(dataSource);
 	}
 
-
-
-//	@Bean
-//	Step step1(JobRepository jobRepository, Tasklet tasklet, PlatformTransactionManager platformTransactionManager){
-//		return new StepBuilder("step1",jobRepository)
-//				.tasklet(tasklet,platformTransactionManager)
-//				.build();
-//	}
 
 }

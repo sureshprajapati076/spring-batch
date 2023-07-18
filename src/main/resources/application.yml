@@ -1,10 +1,5 @@
 #file: noinspection undefined
-spring:
-  datasource:
-    username: batch
-    password: batch
-    url: jdbc:mysql://localhost:3306/person
-query: select * from my_table where id in ('1917','1918')  # result of this query will be selected for processing
+query: select * from users where id in ('2','4')  # result of this query will be selected for processing
 ---
 spring:
   batch:
@@ -14,3 +9,17 @@ spring:
       enabled: false
 
 # spring.batch.initialize-schema=always
+
+
+
+---
+spring:
+  h2:
+  datasource:
+    url: jdbc:h2:tcp://localhost:9090/mem:testdb
+    username: sa
+    password: sa
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
