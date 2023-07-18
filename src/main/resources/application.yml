@@ -3,8 +3,8 @@ spring:
   datasource:
     username: batch
     password: batch
-    url: jdbc:mysql://localhost:3306/person
-query: select * from users where id in ('2','4')  # result of this query will be selected for processing
+    url: jdbc:mysql://localhost:3306/batch_db
+query: SELECT * FROM batch_db.users  # result of this query will be selected for processing
 ---
 spring:
   batch:
