@@ -7,7 +7,8 @@ public class UserItemProcessor implements ItemProcessor<User, User> {
 
     @Override
     public User process(User user) {
-       user.setComments("--COMMENTS ADDED BY PROCESSOR");
+        if(user.getCountry().equals("United States"))
+             user.setComments("--COMMENTS ADDED FOR USA ONLY");
        return user;
     }
 }
