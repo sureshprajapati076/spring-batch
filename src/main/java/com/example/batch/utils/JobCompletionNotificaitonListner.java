@@ -9,6 +9,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+
 @Component
 public class JobCompletionNotificaitonListner implements JobExecutionListener {
 
@@ -21,11 +26,17 @@ public class JobCompletionNotificaitonListner implements JobExecutionListener {
     @Override
     public void afterJob(JobExecution jobExecution){
         if(jobExecution.getStatus() == BatchStatus.COMPLETED){
-            jdbcTemplate.query(query,
-                    (rs,row)-> User.builder()
-                            .fname(rs.getString("FNAME"))
-                            .build()
-            ).stream().map(User::getFname).forEach(System.out::println);
+            LocalDateTime start = jobExecution.getCreateTime();
+            LocalDateTime end = jobExecution.getEndTime();
+            long seconds = ChronoUnit.SECONDS.between(start, end);
+            System.out.println("TOTAL TIME : -> "+seconds + " SECONDS");
+
+//            jdbcTemplate.query(query,
+//                    (rs,row)-> User.builder()
+//                            .fname(rs.getString("FNAME"))
+//                            .build()
+//            ).stream().map(User::getFname).forEach(System.out::println);
+
         }
     }
 

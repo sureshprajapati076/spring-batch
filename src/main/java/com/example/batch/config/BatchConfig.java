@@ -91,7 +91,7 @@ public class BatchConfig {
     Step updateComment (DataSource dataSource, JobRepository repository, JdbcBatchItemWriter<User> writer, PlatformTransactionManager tmx){
 
         return new StepBuilder("commentUpdate",repository)
-                .<User,User> chunk(2,tmx)
+                .<User,User> chunk(100,tmx)
                 .reader(readNow(dataSource))
                 .processor(processor())
                 .writer(writer(dataSource))
