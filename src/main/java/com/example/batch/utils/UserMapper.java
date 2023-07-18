@@ -1,4 +1,4 @@
-package com.example.batch;
+package com.example.batch.utils;
 
 
 import com.example.batch.domain.User;

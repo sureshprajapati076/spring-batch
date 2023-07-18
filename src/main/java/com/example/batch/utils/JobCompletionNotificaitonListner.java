@@ -1,4 +1,4 @@
-package com.example.batch;
+package com.example.batch.utils;
 
 import com.example.batch.domain.User;
 import org.springframework.batch.core.BatchStatus;
@@ -24,9 +24,8 @@ public class JobCompletionNotificaitonListner implements JobExecutionListener {
             jdbcTemplate.query(query,
                     (rs,row)-> User.builder()
                             .fname(rs.getString("FNAME"))
-                            .build())
-
-                            .forEach(System.out::println);
+                            .build()
+            ).stream().map(User::getFname).forEach(System.out::println);
         }
     }
 
